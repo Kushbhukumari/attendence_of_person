@@ -117,9 +117,13 @@ python
       import time
       
 cv2: For capturing video from the webcam and handling image processing.
+
 numpy: For numerical operations, especially for image data handling.
+
 mysql.connector: To connect and interact with the MySQL database.
+
 tensorflow.keras.models.load_model: To load the pre-trained face recognition model.
+
 time: To handle timing operations (e.g., cooldown between recognitions).
 
 ## 2. Load the Trained Model and Labels
@@ -130,6 +134,7 @@ python
 
               
 keras_model.h5: The pre-trained model (from Google Teachable Machine) used for recognizing faces.
+
 labels.txt: Contains labels (names) corresponding to the model's output classes.
 
 
@@ -183,8 +188,11 @@ last_recognition_time = {}
 
 
 camera: Starts the webcam feed.
+
 confidence_threshold: Minimum confidence required to record attendance.
-cooldown_time: Wait time (3 seconds) before recognizing the same face again.
+
+cooldown_time: Wait time (3 seconds) before recognizing the same face again
+.
 last_recognition_time: Tracks when each person was last recognized.
 
 ## 6. Main Loop for Real-Time Recognition
@@ -216,25 +224,40 @@ while True:
 
     if cv2.waitKey(1) == 27:
         break
+
+        
 Step-by-step breakdown:
 
 Capture a frame from the webcam.
+
 Resize the image to 224x224 pixels (model input size).
+
 Normalize the image data to the range [-1, 1].
+
 Predict the class (person) using the model.
+
 Check confidence score against the threshold (0.95).
+
 Cooldown logic ensures the same person isn't marked repeatedly within 3 seconds.
+
 Record attendance in the database if recognized.
+
 ESC key (27) breaks the loop to stop the program.
-7. Cleanup
+
+## 7. Cleanup
 python
-Copy code
-camera.release()
-cv2.destroyAllWindows()
-conn.close()
+ 
+    camera.release()
+    cv2.destroyAllWindows()
+    conn.close()
+
+    
 Stops the webcam.
+
 Closes all OpenCV windows.
+
 Disconnects from the database.
+
 Security Consideration
 Database password (bishal@11) is hardcoded. It's better to use environment variables for security.
 
