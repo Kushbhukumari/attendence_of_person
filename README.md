@@ -9,6 +9,8 @@ A user-friendly project designed to manage and track attendance efficiently. Ide
 - **Download Data**: Export attendance logs in an easy-to-use format (e.g., CSV).
 - **Simple Interface**: Straightforward navigation for all users.
 
+
+
 - ## Acknowledgements
 
 Acknowledgements
@@ -26,6 +28,51 @@ Python Software Foundation – For maintaining the Python language that powers t
 Docker – For simplifying deployment across different platforms.
 
 Community Contributors – For continuous improvements, bug fixes, and feature suggestions.
+
+
+## API Reference
+
+#### Get all items
+
+```http
+GET /api/face_recognition
+```
+
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+| `image` | `file` | **Required**. The image file to perform face detection on. |
+| `model` | `string` | Optional. Detection model: hog (default) or cnn
+ |
+| `tolerance` | `string` | Optional. Face comparison tolerance (default 0.6)
+|
+
+
+
+
+
+## Installation: 1.Visit the Teachable Machine Website: Go to Teachable Machine
+
+![image](https://github.com/user-attachments/assets/ef1ebfa4-2020-43fc-a12d-802e30662eba)
+
+## 2.Create a New Project: Click on "Get Started" and select "Image Model" under the "New Project" section 3.Select Model Type: Choose the "Standard Image Model" option. image
+
+![image](https://github.com/user-attachments/assets/7c9d2a31-e40a-4e17-a9b0-54628adfe6de)
+
+## 3.Label Examples: Assign labels to each example image
+
+![image](https://github.com/user-attachments/assets/8729ef01-315c-4470-87a2-b8982fe6a982)
+
+## 4.Export the Model: Once training is complete, click on "Export the Model" and download the model files (a .zip file containing the model weights (.h5) and labels (.txt) files) image
+
+
+## Implementation in Python 
+
+1.Set Up Your Environment: Ensure you have Python 3.7 or higher installed.
+2.Install Required Libraries: Install OpenCV and NumPy using pip: python ->pip install opencv-python numpy
+3.Extract Model Files: Extract the downloaded .h5 and .txt files from the .zip archive and save them in your project directory.
+4.Write Python Code: Use the following code to load the model and perform face recognition: from keras.models import load_model 
 
 
 ## How to Download and Use
