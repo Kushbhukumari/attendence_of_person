@@ -51,6 +51,9 @@ GET /api/face_recognition
 
 
 
+###  Installation
+
+
 
 ## Installation: 1.Visit the Teachable Machine Website: Go to Teachable Machine
 
