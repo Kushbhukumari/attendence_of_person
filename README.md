@@ -102,6 +102,141 @@ GET /api/face_recognition
 3. **Customize as Needed**:
    - Edit files to fit your requirements.
    - Add custom branding or functionality.
+  
+
+
+   ## This Python script is a Face Recognition Attendance System that integrates computer vision and a MySQL database to automatically record attendance using a webcam. Here's a step-by-step explanation of how the code works:
+
+## 1. Import Libraries
+python 
+
+      import cv2
+      import numpy as np
+      import mysql.connector
+      from tensorflow.keras.models import load_model
+      import time
+      
+cv2: For capturing video from the webcam and handling image processing.
+numpy: For numerical operations, especially for image data handling.
+mysql.connector: To connect and interact with the MySQL database.
+tensorflow.keras.models.load_model: To load the pre-trained face recognition model.
+time: To handle timing operations (e.g., cooldown between recognitions).
+
+## 2. Load the Trained Model and Labels
+
+python 
+           model = load_model("keras_model.h5", compile=False)
+           class_names = open("labels.txt", "r").readlines()
+
+              
+keras_model.h5: The pre-trained model (from Google Teachable Machine) used for recognizing faces.
+labels.txt: Contains labels (names) corresponding to the model's output classes.
+
+
+## 3. Connect to MySQL Database
+python
+
+    conn = mysql.connector.connect(
+         host="localhost",
+         user="root",
+         password="bishal@11",
+         database="attendance_system"
+        )
+      c = conn.cursor()
+
+      
+Connects to the attendance_system database to store and update attendance records.
+
+
+## 4. Attendance Recording Function
+python
+
+def record_attendance(name):
+    try:
+        c.execute("SELECT * FROM attendance WHERE name = %s", (name,))
+        result = c.fetchone()
+
+        if result:
+            c.execute("UPDATE attendance SET count = count + 1 WHERE name = %s", (name,))
+            conn.commit()
+            print(f"Attendance incremented for {name}")
+        else:
+            c.execute("INSERT INTO attendance (name, count) VALUES (%s, %s)", (name, 1))
+            conn.commit()
+            print(f"Attendance marked for {name} with count = 1")
+    except Exception as e:
+        print(f"Error updating attendance: {e}")
+
+
+Checks if the person already exists in the database.
+If the person exists, their attendance count is incremented.
+If the person does not exist, they are added with a count of 1.
+
+
+## 5. Webcam Setup and Recognition Control
+python
+
+camera = cv2.VideoCapture(0)
+confidence_threshold = 0.95
+cooldown_time = 3
+last_recognition_time = {}
+
+
+camera: Starts the webcam feed.
+confidence_threshold: Minimum confidence required to record attendance.
+cooldown_time: Wait time (3 seconds) before recognizing the same face again.
+last_recognition_time: Tracks when each person was last recognized.
+
+## 6. Main Loop for Real-Time Recognition
+python
+
+
+while True:
+    ret, image = camera.read()
+    image_resized = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
+    cv2.imshow("Webcam Image", image_resized)
+
+    image_array = np.asarray(image_resized, dtype=np.float32).reshape(1, 224, 224, 3)
+    image_array = (image_array / 127.5) - 1
+
+    prediction = model.predict(image_array, verbose=0)
+    index = np.argmax(prediction)
+    class_name = class_names[index].strip()
+    confidence_score = prediction[0][index]
+
+    current_time = time.time()
+
+    if confidence_score >= confidence_threshold:
+        last_time = last_recognition_time.get(class_name, 0)
+
+        if current_time - last_time >= cooldown_time:
+            print(f"Recognized as: {class_name} with confidence {confidence_score*100:.2f}%")
+            record_attendance(class_name)
+            last_recognition_time[class_name] = current_time
+
+    if cv2.waitKey(1) == 27:
+        break
+Step-by-step breakdown:
+
+Capture a frame from the webcam.
+Resize the image to 224x224 pixels (model input size).
+Normalize the image data to the range [-1, 1].
+Predict the class (person) using the model.
+Check confidence score against the threshold (0.95).
+Cooldown logic ensures the same person isn't marked repeatedly within 3 seconds.
+Record attendance in the database if recognized.
+ESC key (27) breaks the loop to stop the program.
+7. Cleanup
+python
+Copy code
+camera.release()
+cv2.destroyAllWindows()
+conn.close()
+Stops the webcam.
+Closes all OpenCV windows.
+Disconnects from the database.
+Security Consideration
+Database password (bishal@11) is hardcoded. It's better to use environment variables for security.
 
 
 ## Contribution
