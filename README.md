@@ -9,6 +9,25 @@ A user-friendly project designed to manage and track attendance efficiently. Ide
 - **Download Data**: Export attendance logs in an easy-to-use format (e.g., CSV).
 - **Simple Interface**: Straightforward navigation for all users.
 
+- ## Acknowledgements
+
+Acknowledgements
+
+dlib Library – For providing the foundational machine learning models and facial recognition algorithms.
+
+OpenCV – For enabling real-time computer vision capabilities in Python.
+
+NumPy – For efficient numerical operations and data handling.
+
+Scikit-learn – For supporting machine learning techniques used in face comparison.
+
+Python Software Foundation – For maintaining the Python language that powers this project.
+
+Docker – For simplifying deployment across different platforms.
+
+Community Contributors – For continuous improvements, bug fixes, and feature suggestions.
+
+
 ## How to Download and Use
 1. **Download the Files**:
    - Click the green **Code** button at the top of the repository.
